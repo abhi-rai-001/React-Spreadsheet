@@ -130,12 +130,12 @@ const getPriorityColor = (priority: string) => {
 
 
 const columns: ColumnDef<TaskData>[] = [
-  { header: "#", accessorKey: "id" },
-  { header: "Job Request", accessorKey: "jobRequest" },
-  { header: "Submitted", accessorKey: "submittedDate" },
+  { header: "#", accessorKey: "id" as const },
+  { header: "Job Request", accessorKey: "jobRequest" as const },
+  { header: "Submitted", accessorKey: "submittedDate" as const },
   {
     header: "Status",
-    accessorKey: "status",
+    accessorKey: "status" as const,
     cell: ({ getValue }) => {
       const value = getValue<string>();
       return value ? (
@@ -151,7 +151,7 @@ const columns: ColumnDef<TaskData>[] = [
       );
     },
   },
-  { header: "Submitter", accessorKey: "submitter" },
+  { header: "Submitter", accessorKey: "submitter" as const },
   {
     header: "URL",
     accessorKey: "url",
@@ -169,10 +169,10 @@ const columns: ColumnDef<TaskData>[] = [
       );
     },
   },
-  { header: "Assigned", accessorKey: "assigned" },
+  { header: "Assigned", accessorKey: "assigned" as const },
   {
     header: "Priority",
-    accessorKey: "priority",
+    accessorKey: "priority" as const,
     cell: ({ getValue }) => {
       const value = getValue<string>();
       return value ? (
@@ -188,7 +188,7 @@ const columns: ColumnDef<TaskData>[] = [
       );
     },
   },
-  { header: "Due Date", accessorKey: "dueDate" },
+  { header: "Due Date", accessorKey: "dueDate" as const },
   {
     header: "Est. Value",
     accessorKey: "estValue",
@@ -314,23 +314,21 @@ const SpreadsheetApp: React.FC = () => {
 
                     return (
                       <td
-                        key={cell.id}
-                        tabIndex={0}
-                        data-row={row.index}
-                        data-col={colIdx}
-                        onClick={() =>
-                          setSelectedCell({ row: row.index, col: colIdx })
-                        }
-                        onKeyDown={handleKeyDown}
-                        className={`px-4 py-4 whitespace-nowrap text-sm text-gray-900 min-h-[56px] ${
-                          isActive ? "outline-none ring-2 ring-blue-500" : ""
-                        }`}
-                      >
-                        {flexRender(
-                          cell.column.columnDef.cell ?? cell.column.columnDef.accessorKey,
-                          cell.getContext()
-                        )}
-                      </td>
+  key={cell.id}
+  tabIndex={0}
+  data-row={row.index}
+  data-col={colIdx}
+  onClick={() => setSelectedCell({ row: row.index, col: colIdx })}
+  onKeyDown={handleKeyDown}
+  className={`px-4 py-4 whitespace-nowrap text-sm text-gray-900 min-h-[56px] ${
+    isActive ? "outline-none ring-2 ring-blue-500" : ""
+  }`}
+>
+  {flexRender(
+    cell.column.columnDef.cell,
+    cell.getContext()
+  )}
+</td>
                     );
                   })}
                 </tr>
